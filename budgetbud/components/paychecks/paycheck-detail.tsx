@@ -25,6 +25,13 @@ export function PaycheckDetail({ paycheckId }: PaycheckDetailProps) {
   const [editOpen, setEditOpen] = useState(false)
   const router = useRouter()
 
+  // Debug logging
+  console.log('PaycheckDetail: paycheckId =', paycheckId)
+  console.log('PaycheckDetail: loading =', loading)
+  console.log('PaycheckDetail: error =', error)
+  console.log('PaycheckDetail: paycheck =', paycheck)
+  console.log('PaycheckDetail: allocations =', allocations)
+
   const handleDelete = async () => {
     try {
       setDeleteLoading(true)
@@ -184,7 +191,7 @@ export function PaycheckDetail({ paycheckId }: PaycheckDetailProps) {
             <div>
               <p className="text-sm text-muted-foreground">Date</p>
               <p className="text-lg font-medium">
-                {format(new Date(paycheck.date), 'MMM dd, yyyy')}
+                {format(new Date(paycheck.date + 'T00:00:00'), 'MMM dd, yyyy')}
               </p>
             </div>
             <div>

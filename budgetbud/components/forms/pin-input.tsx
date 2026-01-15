@@ -82,7 +82,7 @@ export function PinInput({
         {[0, 1, 2, 3, 4, 5].map((index) => (
           <Input
             key={index}
-            ref={(el) => (inputRefs.current[index] = el)}
+            ref={(el) => { inputRefs.current[index] = el }}
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"

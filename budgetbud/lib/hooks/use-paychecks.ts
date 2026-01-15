@@ -40,7 +40,7 @@ export function usePaychecks() {
 
       if (paycheckError) throw paycheckError
 
-      // For each paycheck, get top 3 allocations for preview
+      // For each paycheck, get all allocations for accurate breakdown display
       const paychecksWithAllocations = await Promise.all(
         (paycheckData || []).map(async (paycheck) => {
           const { data: allocations, error: allocError } = await supabase
@@ -54,15 +54,15 @@ export function usePaychecks() {
             return { ...paycheck, allocations: [] }
           }
 
-          // Group allocations by paycheck and take top 3
+          // Get all allocations sorted by percentage (for UI display logic)
           const paycheckAllocations = allocations
             ?.filter(a => a.paycheck_id === paycheck.id)
             .sort((a, b) => b.percentage - a.percentage)
-            .slice(0, 3)
             .map(a => ({
               category_id: a.category_id,
               category_name: a.category_name,
               category_color: a.category_color,
+              amount: Number(a.budgeted_amount), // For compatibility with components expecting 'amount'
               budgeted_amount: Number(a.budgeted_amount),
               spent_amount: Number(a.spent_amount),
               percentage: Number(a.percentage)

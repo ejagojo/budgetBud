@@ -6,12 +6,15 @@ import { Button } from '@/components/ui/button'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { createClient } from '@/lib/supabase/client'
 import { exportUserData } from '@/lib/utils/data-export'
+import { deleteAllPaycheckData } from '@/lib/actions/settings'
 import { toast } from 'sonner'
-import { Download, Trash2, AlertTriangle, Database } from 'lucide-react'
+import { Download, Trash2, AlertTriangle, Database, DollarSign } from 'lucide-react'
 
 export function DataSettings() {
   const [exportLoading, setExportLoading] = useState(false)
   const [resetLoading, setResetLoading] = useState(false)
+  const [deletePaychecksLoading, setDeletePaychecksLoading] = useState(false)
+  const [deleteConfirmation, setDeleteConfirmation] = useState('')
   const supabase = createClient()
 
   const handleExport = async () => {
@@ -32,7 +35,7 @@ export function DataSettings() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      const { data, error } = await supabase.rpc('reset_user_data', {
+      const { data, error } = await (supabase.rpc as any)('reset_user_data', {
         p_user_id: user.id
       })
 
@@ -50,6 +53,26 @@ export function DataSettings() {
       toast.error(err instanceof Error ? err.message : 'Failed to reset data')
     } finally {
       setResetLoading(false)
+    }
+  }
+
+  const handleDeletePaychecks = async () => {
+    if (deleteConfirmation !== 'DELETE') {
+      toast.error('Please type "DELETE" to confirm')
+      return
+    }
+
+    try {
+      setDeletePaychecksLoading(true)
+      await deleteAllPaycheckData()
+      toast.success('All paycheck data has been deleted successfully')
+      setDeleteConfirmation('')
+      // Close dialog by triggering state reset
+    } catch (err) {
+      console.error('Delete paycheck error:', err)
+      toast.error(err instanceof Error ? err.message : 'Failed to delete paycheck data')
+    } finally {
+      setDeletePaychecksLoading(false)
     }
   }
 
@@ -91,6 +114,74 @@ export function DataSettings() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            <div className="p-4 border border-destructive/20 rounded-lg bg-destructive/5">
+              <h4 className="font-medium text-destructive mb-2 flex items-center gap-2">
+                <DollarSign className="w-4 h-4" />
+                Clear Paycheck History
+              </h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Permanently delete all paycheck data and budget allocations. This will reset your dashboard
+                to show no income history while keeping your categories and spending data intact.
+              </p>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    disabled={deletePaychecksLoading}
+                    className="w-full sm:w-auto"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    {deletePaychecksLoading ? 'Deleting...' : 'Clear Paycheck History'}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-destructive">
+                      Clear Paycheck History
+                    </AlertDialogTitle>
+                    <AlertDialogDescription asChild>
+                      <div className="space-y-3">
+                        <p className="font-medium">
+                          This action cannot be undone. This will permanently delete:
+                        </p>
+                        <ul className="list-disc list-inside space-y-1 text-sm">
+                          <li>All paycheck records and amounts</li>
+                          <li>All budget allocations for each paycheck</li>
+                          <li>Income trends and dashboard history</li>
+                        </ul>
+                        <div className="pt-2 border-t">
+                          <p className="text-sm font-medium mb-2">
+                            Type "DELETE" to confirm:
+                          </p>
+                          <input
+                            type="text"
+                            value={deleteConfirmation}
+                            onChange={(e) => setDeleteConfirmation(e.target.value)}
+                            placeholder="DELETE"
+                            className="w-full px-3 py-2 border rounded-md text-center font-mono text-sm"
+                            maxLength={6}
+                          />
+                        </div>
+                      </div>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setDeleteConfirmation('')}>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeletePaychecks}
+                      disabled={deleteConfirmation !== 'DELETE' || deletePaychecksLoading}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {deletePaychecksLoading ? 'Deleting...' : 'Yes, Delete All Paychecks'}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+
             <div className="p-4 border border-destructive/20 rounded-lg bg-destructive/5">
               <h4 className="font-medium text-destructive mb-2">Reset All Data</h4>
               <p className="text-sm text-muted-foreground mb-4">

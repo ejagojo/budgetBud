@@ -123,6 +123,32 @@ BEGIN
 END;
 $$;
 
+-- Function to get lifetime allocation totals across all paychecks
+CREATE OR REPLACE FUNCTION get_lifetime_allocations()
+RETURNS TABLE (
+  category_id UUID,
+  category_name TEXT,
+  category_color TEXT,
+  total_amount DECIMAL(10,2)
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    a.category_id,
+    COALESCE(c.name, 'Archived Category') as category_name,
+    COALESCE(c.color, '#6B7280') as category_color,
+    SUM(a.budgeted_amount) as total_amount
+  FROM allocations a
+  LEFT JOIN categories c ON a.category_id = c.id
+  GROUP BY a.category_id, c.name, c.color
+  ORDER BY SUM(a.budgeted_amount) DESC;
+END;
+$$;
+
 -- Grant execute permissions
 GRANT EXECUTE ON FUNCTION create_paycheck_with_snapshot(UUID, DECIMAL, DATE, paycheck_frequency, TEXT) TO authenticated;
 GRANT EXECUTE ON FUNCTION get_paycheck_with_allocations(UUID, UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION get_lifetime_allocations() TO authenticated;

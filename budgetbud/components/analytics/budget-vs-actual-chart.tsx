@@ -52,11 +52,11 @@ export function BudgetVsActualChart({ data }: BudgetVsActualChartProps) {
           />
           <YAxis fontSize={12} />
           <Tooltip
-            formatter={(value: number, name: string) => [
-              `$${value.toFixed(2)}`,
+            formatter={(value: number | undefined, name: string | undefined) => [
+              value ? `$${value.toFixed(2)}` : '$0.00',
               name === 'budgeted' ? 'Budgeted' :
               name === 'spent' ? 'Spent' :
-              name === 'remaining' ? 'Remaining' : name
+              name === 'remaining' ? 'Remaining' : (name || '')
             ]}
             labelFormatter={(label) => chartData.find(d => d.name === label)?.fullName || label}
           />

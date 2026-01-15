@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
+import { MotionButton } from '@/components/ui/motion-button';
 import {
   Home,
   Receipt,
@@ -44,7 +46,7 @@ const mobileNavItems = [
     name: 'Paychecks',
     href: '/paychecks',
     icon: Receipt,
-    mobileLabel: 'Income',
+    mobileLabel: 'Paychecks',
   },
   {
     name: 'More',
@@ -115,6 +117,7 @@ export function Navigation() {
   const pathname = usePathname();
   const { signOut } = usePinAuth();
   const router = useRouter();
+  const [quickActionsOpen, setQuickActionsOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -187,7 +190,7 @@ export function Navigation() {
           })}
 
           {/* Central ADD Button */}
-          <Drawer>
+          <Drawer open={quickActionsOpen} onOpenChange={setQuickActionsOpen}>
             <DrawerTrigger asChild>
               <button className="flex flex-col items-center justify-center min-h-[44px] relative">
                 <div className="absolute -top-3 w-14 h-14 bg-primary rounded-full flex items-center justify-center shadow-lg border-4 border-background">
@@ -200,37 +203,46 @@ export function Navigation() {
               <DrawerHeader>
                 <DrawerTitle className="text-center">Quick Actions</DrawerTitle>
               </DrawerHeader>
-              <div className="px-4 pb-6 space-y-4">
+              <div className="px-4 pb-6">
                 {/* Quick Actions */}
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    className="h-16 flex-col gap-2"
+                <div className="flex flex-col items-center gap-4">
+                  <MotionButton
+                    className="w-full max-w-[280px] h-16 flex-col gap-2"
                     size="lg"
-                    onClick={() => router.push('/transactions')}
+                    onClick={() => {
+                      setQuickActionsOpen(false);
+                      router.push('/transactions');
+                    }}
                   >
                     <CreditCard className="h-6 w-6" />
                     <span>Add Transaction</span>
-                  </Button>
+                  </MotionButton>
 
-                  <Button
+                  <MotionButton
                     variant="outline"
-                    className="h-16 flex-col gap-2"
+                    className="w-full max-w-[280px] h-16 flex-col gap-2"
                     size="lg"
-                    onClick={() => router.push('/paychecks/create')}
+                    onClick={() => {
+                      setQuickActionsOpen(false);
+                      router.push('/paychecks/create');
+                    }}
                   >
                     <Receipt className="h-6 w-6" />
                     <span>Add Paycheck</span>
-                  </Button>
+                  </MotionButton>
 
-                  <Button
+                  <MotionButton
                     variant="outline"
-                    className="h-16 flex-col gap-2"
+                    className="w-full max-w-[280px] h-16 flex-col gap-2"
                     size="lg"
-                    onClick={() => router.push('/categories')}
+                    onClick={() => {
+                      setQuickActionsOpen(false);
+                      router.push('/categories');
+                    }}
                   >
                     <Tag className="h-6 w-6" />
                     <span>New Category</span>
-                  </Button>
+                  </MotionButton>
                 </div>
               </div>
             </DrawerContent>

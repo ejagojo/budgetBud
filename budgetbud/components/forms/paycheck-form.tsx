@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { MotionButton } from '@/components/ui/motion-button'
 import { Loader2, DollarSign } from 'lucide-react'
 import { createPaycheck } from '@/lib/actions/paychecks'
 import { useRouter } from 'next/navigation'
@@ -38,7 +39,7 @@ export function PaycheckForm({ onSuccess }: PaycheckFormProps) {
   const form = useForm<PaycheckFormData>({
     resolver: zodResolver(paycheckSchema),
     defaultValues: {
-      amount: 0,
+      amount: undefined, // Don't default to 0 to avoid leading zero issue
       date: new Date().toISOString().split('T')[0], // Today's date
       frequency: 'bi-weekly',
       description: '',
@@ -91,8 +92,11 @@ export function PaycheckForm({ onSuccess }: PaycheckFormProps) {
                         min="0.01"
                         placeholder="0.00"
                         className="pl-10 text-lg"
-                        {...field}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        value={field.value || ''}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          field.onChange(value === '' ? undefined : parseFloat(value) || undefined)
+                        }}
                       />
                     </div>
                   </FormControl>
@@ -170,7 +174,7 @@ export function PaycheckForm({ onSuccess }: PaycheckFormProps) {
               >
                 Cancel
               </Button>
-              <Button
+              <MotionButton
                 type="submit"
                 disabled={loading}
                 className="flex-1"
@@ -183,7 +187,7 @@ export function PaycheckForm({ onSuccess }: PaycheckFormProps) {
                 ) : (
                   'Create Paycheck'
                 )}
-              </Button>
+              </MotionButton>
             </div>
           </form>
         </Form>

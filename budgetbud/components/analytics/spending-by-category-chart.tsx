@@ -61,7 +61,7 @@ export function SpendingByCategoryChart({ data }: SpendingByCategoryChartProps) 
             ))}
           </Pie>
           <Tooltip
-            formatter={(value: number) => [`$${value.toFixed(2)}`, 'Spent']}
+            formatter={(value: number | undefined) => [value ? `$${value.toFixed(2)}` : '$0.00', 'Spent']}
             labelFormatter={(label) => `${label}`}
           />
           <Legend
