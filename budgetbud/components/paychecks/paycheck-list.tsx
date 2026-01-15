@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { usePaychecks } from '@/lib/hooks/use-paychecks'
 import { useRouter } from 'next/navigation'
-import { Calendar, TrendingUp, Plus, RefreshCw, Copy, CheckCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { Calendar, TrendingUp, Plus, RefreshCw, Copy, CheckCircle, ChevronDown, ChevronUp, ChevronRight } from 'lucide-react'
 import { format } from 'date-fns'
 import { toast } from 'sonner'
 
@@ -99,28 +99,37 @@ export function PaycheckList() {
             className="cursor-pointer hover:shadow-md transition-shadow"
             onClick={() => router.push(`/paychecks/${paycheck.id}`)}
           >
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium">
+            <CardContent className="p-3 md:p-4">
+              {/* Mobile-first layout: Top row for date/amount, bottom row for status/actions */}
+              <div className="space-y-3">
+                {/* Top Row: Date (Left) | Amount (Right) */}
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <span className="font-medium text-sm md:text-base">
                       {format(new Date(paycheck.date + 'T00:00:00'), 'MMM dd, yyyy')}
                     </span>
                   </div>
-                  <p className="text-sm text-muted-foreground capitalize">
-                    {paycheck.frequency.replace('-', ' ')}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-xl font-bold">
+                  <div className="text-xl md:text-2xl font-bold text-primary">
                     ${paycheck.amount.toLocaleString()}
                   </div>
-                  {paycheck.description && (
-                    <p className="text-sm text-muted-foreground truncate max-w-32">
-                      {paycheck.description}
-                    </p>
-                  )}
+                </div>
+
+                {/* Bottom Row: Status Badge (Left) | View Chevron (Right) */}
+                <div className="flex justify-between items-center">
+                  <Badge variant="secondary" className="capitalize text-xs">
+                    {paycheck.frequency.replace('-', ' ')}
+                  </Badge>
+                  <div className="flex items-center gap-2">
+                    {paycheck.description && (
+                      <span className="text-xs text-muted-foreground truncate max-w-24 md:max-w-32">
+                        {paycheck.description}
+                      </span>
+                    )}
+                    <div className="text-muted-foreground">
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
               </div>
 

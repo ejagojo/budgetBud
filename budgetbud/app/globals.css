@@ -45,6 +45,52 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  /* Rose Theme */
+  .rose {
+    --background: 0 0% 100%;
+    --foreground: 335 68% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 335 68% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 335 68% 20%;
+    --primary: 335 68% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 340 75% 78%;
+    --secondary-foreground: 335 68% 25%;
+    --muted: 340 50% 94%;
+    --muted-foreground: 335 30% 45%;
+    --accent: 330 100% 82%;
+    --accent-foreground: 335 68% 25%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 340 40% 88%;
+    --input: 340 40% 88%;
+    --ring: 335 68% 65%;
+    --radius: 0.5rem;
+  }
+
+  .dark.rose {
+    --background: 335 50% 8%;
+    --foreground: 340 50% 94%;
+    --card: 335 50% 8%;
+    --card-foreground: 340 50% 94%;
+    --popover: 335 50% 8%;
+    --popover-foreground: 340 50% 94%;
+    --primary: 335 68% 65%;
+    --primary-foreground: 335 50% 8%;
+    --secondary: 340 75% 78%;
+    --secondary-foreground: 335 68% 25%;
+    --muted: 335 30% 15%;
+    --muted-foreground: 340 20% 65%;
+    --accent: 330 100% 82%;
+    --accent-foreground: 335 50% 8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 340 50% 94%;
+    --border: 335 30% 20%;
+    --input: 335 30% 20%;
+    --ring: 335 68% 65%;
+  }
 }
 
 @layer base {
@@ -53,5 +99,35 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Mobile optimizations */
+  /* Prevent iOS zoom on form inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Ensure minimum touch targets on mobile */
+  @media (max-width: 768px) {
+    button,
+    [role="button"],
+    input[type="submit"],
+    input[type="button"],
+    .cursor-pointer {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Better touch feedback */
+    button:active,
+    [role="button"]:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
+    }
   }
 }

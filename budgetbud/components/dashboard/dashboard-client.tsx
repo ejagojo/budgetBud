@@ -100,11 +100,11 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
   })) || [];
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-4xl space-y-6">
+    <div className="container mx-auto px-4 py-6 pb-24 max-w-4xl space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">Your income and spending at a glance</p>
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">Dashboard</h1>
+        <p className="text-sm md:text-base text-muted-foreground">Your income and spending at a glance</p>
       </div>
 
       {/* Latest Paycheck Card */}
@@ -122,7 +122,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Amount</p>
                 <p className="text-2xl font-bold">${data.latestPaycheck.amount.toLocaleString()}</p>
@@ -251,18 +251,20 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
             </p>
           </CardHeader>
           <CardContent>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={incomeTrendsData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis tickFormatter={(value) => `$${value}`} />
-                  <Tooltip
-                    formatter={(value: number | undefined) => [value ? `$${value.toLocaleString()}` : '$0', 'Amount']}
-                  />
-                  <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="h-48 md:h-64 overflow-x-auto">
+              <div className="min-w-[400px] md:min-w-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={incomeTrendsData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis tickFormatter={(value) => `$${value}`} />
+                    <Tooltip
+                      formatter={(value: number | undefined) => [value ? `$${value.toLocaleString()}` : '$0', 'Amount']}
+                    />
+                    <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -313,7 +315,7 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
             <Button
               variant="outline"
               className="h-20 flex-col gap-2"
@@ -341,10 +343,10 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
             <Button
               variant="outline"
               className="h-20 flex-col gap-2"
-              onClick={() => router.push("/analytics")}
+              onClick={() => router.push("/settings")}
             >
               <AlertCircle className="w-5 h-5" />
-              View Analytics
+              Settings
             </Button>
           </div>
         </CardContent>

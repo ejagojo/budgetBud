@@ -66,7 +66,15 @@ export function ProfileSettings() {
         })
         .eq('id', user.id)
 
-      if (error) throw error
+      if (error) {
+        console.error('Profile Update Error:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+        throw error
+      }
 
       toast.success('Profile updated successfully')
       setInitialData(data)
@@ -106,6 +114,7 @@ export function ProfileSettings() {
                 </FormItem>
               )}
             />
+
 
             <div className="flex justify-end">
               <Button
