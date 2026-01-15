@@ -49,3 +49,4 @@ A personal finance budgeting application built with Next.js, TypeScript, and Sup
 
 See the `_bmad-output/` directory for detailed implementation documentation for each epic.
 
+

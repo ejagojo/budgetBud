@@ -254,3 +254,4 @@ BudgetBud is a 2-user budgeting webapp (Mobile-first + Desktop) that enables cou
 - **Error State:** Clear filters button on filter errors
 - **Mobile-first:** Collapsible filter panel, touch-friendly controls
 
+

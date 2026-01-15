@@ -83,3 +83,4 @@ After successful deployment, your BudgetBud instance will be live at:
 ---
 
 **Need help?** Check Vercel deployment logs or Supabase function logs for detailed error messages.
+

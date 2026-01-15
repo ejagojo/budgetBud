@@ -11,3 +11,4 @@ const hashedPin = hashPin(pin);
 console.log(`PIN: ${pin}`);
 console.log(`SHA-256 Hash: ${hashedPin}`);
 
+

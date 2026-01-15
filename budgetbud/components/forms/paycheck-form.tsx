@@ -54,6 +54,9 @@ export function PaycheckForm({ onSuccess }: PaycheckFormProps) {
       toast.success('Paycheck created successfully!')
       form.reset()
 
+      // Force refresh of current page data to update dashboard/paycheck lists
+      router.refresh()
+
       if (onSuccess) {
         onSuccess()
       } else {

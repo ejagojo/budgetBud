@@ -160,23 +160,8 @@ export function CategoryList() {
         ))}
       </div>
 
-      {/* Floating Action Button */}
-      <div className="fixed bottom-6 right-6 z-50 md:bottom-8 md:right-8">
-        <CategoryForm
-          totalPercentage={totalPercentage}
-          onSubmit={addCategory}
-          trigger={
-            <Button
-              size="lg"
-              className="rounded-full w-14 h-14 shadow-lg"
-              disabled={totalPercentage >= 100}
-            >
-              <Plus className="w-6 h-6" />
-            </Button>
-          }
-        />
-      </div>
     </div>
   );
 }
+
 

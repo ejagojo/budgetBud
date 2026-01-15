@@ -1058,3 +1058,4 @@ With Epic 1 complete, you can now proceed to:
 
 The foundation is now solid and secure, ready for building the core budgeting features!
 
+

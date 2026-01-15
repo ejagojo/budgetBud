@@ -32,9 +32,10 @@ export async function createPaycheck(formData: {
 
     if (error) throw error
 
-    // Revalidate dashboard and paycheck pages
+    // Revalidate all affected pages and cache
     revalidatePath('/dashboard')
     revalidatePath('/paychecks')
+    revalidatePath('/')
 
     return {
       success: true,
