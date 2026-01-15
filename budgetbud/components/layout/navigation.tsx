@@ -59,12 +59,6 @@ const mobileNavItems = [
 // Menu navigation items (in drawer)
 const menuNavItems = [
   {
-    name: 'Analytics',
-    href: '/analytics',
-    icon: BarChart3,
-    description: 'View spending insights',
-  },
-  {
     name: 'Categories',
     href: '/categories',
     icon: Tag,
@@ -95,11 +89,6 @@ const allNavItems = [
     name: 'Paychecks',
     href: '/paychecks',
     icon: Receipt,
-  },
-  {
-    name: 'Analytics',
-    href: '/analytics',
-    icon: BarChart3,
   },
   {
     name: 'Categories',
@@ -290,18 +279,20 @@ export function Navigation() {
                     {menuNavItems.map((item) => {
                       const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
                       return (
-                        <Link key={item.name} href={item.href}>
-                          <Button
-                            variant={isActive ? "secondary" : "ghost"}
-                            className="w-full justify-start h-12"
-                          >
-                            <item.icon className="mr-3 h-5 w-5" />
-                            <div className="flex flex-col items-start">
-                              <span className="text-sm font-medium">{item.name}</span>
-                              <span className="text-xs text-muted-foreground">{item.description}</span>
-                            </div>
-                          </Button>
-                        </Link>
+                        <DrawerClose key={item.name} asChild>
+                          <Link href={item.href}>
+                            <Button
+                              variant={isActive ? "secondary" : "ghost"}
+                              className="w-full justify-start h-12"
+                            >
+                              <item.icon className="mr-3 h-5 w-5" />
+                              <div className="flex flex-col items-start">
+                                <span className="text-sm font-medium">{item.name}</span>
+                                <span className="text-xs text-muted-foreground">{item.description}</span>
+                              </div>
+                            </Button>
+                          </Link>
+                        </DrawerClose>
                       );
                     })}
                   </div>
@@ -309,14 +300,16 @@ export function Navigation() {
 
                 {/* Sign Out */}
                 <div className="border-t pt-4">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-destructive hover:text-destructive h-12"
-                    onClick={handleSignOut}
-                  >
-                    <LogOut className="mr-3 h-5 w-5" />
-                    Sign Out
-                  </Button>
+                  <DrawerClose asChild>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-destructive hover:text-destructive h-12"
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="mr-3 h-5 w-5" />
+                      Sign Out
+                    </Button>
+                  </DrawerClose>
                 </div>
               </div>
             </DrawerContent>
