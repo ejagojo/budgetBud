@@ -21,7 +21,7 @@ export async function deleteAllPaycheckData() {
       throw new Error('Failed to fetch paycheck data for deletion')
     }
 
-    const paycheckIds = paychecks?.map(p => p.id) || []
+    const paycheckIds = paychecks?.map((p: any) => p.id) || []
 
     // 1. Delete allocations (child of paychecks) - must be done first
     if (paycheckIds.length > 0) {
@@ -62,7 +62,7 @@ export async function deleteAllPaycheckData() {
       // Don't throw here - paychecks are already deleted, just log the error
     }
 
-    const budgetVersionIds = budgetVersions?.map(bv => bv.id) || []
+    const budgetVersionIds = budgetVersions?.map((bv: any) => bv.id) || []
 
     // 4. Delete budget version categories (junction table)
     if (budgetVersionIds.length > 0) {

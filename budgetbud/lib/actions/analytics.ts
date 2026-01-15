@@ -30,8 +30,8 @@ export async function getAnalyticsData(): Promise<AnalyticsData> {
   }
 
   // Use the RPC function we created for fast analytics
-  const { data: analyticsData, error } = await supabase
-    .rpc('get_analytics_data', { p_user_id: user.id })
+  const { data: analyticsData, error } = await (supabase as any)
+    .rpc('get_analytics_data', user.id)
 
   if (error) {
     console.error('Analytics RPC error:', error)
@@ -44,7 +44,7 @@ export async function getAnalyticsData(): Promise<AnalyticsData> {
   }
 
   // Transform the raw data
-  const spendingByCategory = (analyticsData || []).map(item => ({
+  const spendingByCategory = (analyticsData || []).map((item: any) => ({
     categoryId: item.category_id,
     categoryName: item.category_name,
     categoryColor: item.category_color,
@@ -53,8 +53,8 @@ export async function getAnalyticsData(): Promise<AnalyticsData> {
     percentage: Number(item.budgeted_percentage),
   }))
 
-  const totalSpent = spendingByCategory.reduce((sum, cat) => sum + cat.spent, 0)
-  const totalBudgeted = spendingByCategory.reduce((sum, cat) => sum + cat.budgeted, 0)
+  const totalSpent = spendingByCategory.reduce((sum: number, cat: any) => sum + cat.spent, 0)
+  const totalBudgeted = spendingByCategory.reduce((sum: number, cat: any) => sum + cat.budgeted, 0)
 
   return {
     spendingByCategory,

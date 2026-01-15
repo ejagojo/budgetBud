@@ -141,7 +141,7 @@ export async function getDashboardData(): Promise<DashboardData> {
   }
 
   // Calculate total allocated percentage
-  const totalAllocated = (categories || []).reduce((sum, cat) => sum + cat.percentage, 0)
+  const totalAllocated = (categories || []).reduce((sum: number, cat: any) => sum + cat.percentage, 0)
 
   // Call the RPC function for dashboard stats
   console.log('Server: Calling get_dashboard_stats RPC...')

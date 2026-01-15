@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { Database } from '@/lib/supabase/types'
 import { revalidatePath } from 'next/cache'
 
 type PaycheckInsert = Database['public']['Tables']['paychecks']['Insert']
@@ -21,7 +22,7 @@ export async function createPaycheck(formData: {
 
   try {
     // Call the RPC function
-    const { data, error } = await supabase.rpc('create_paycheck_with_snapshot', {
+    const { data, error } = await (supabase as any).rpc('create_paycheck_with_snapshot', {
       p_user_id: user.id,
       p_amount: formData.amount,
       p_date: formData.date,
@@ -56,7 +57,7 @@ export async function updatePaycheck(paycheckId: string, updates: {
   if (!user) throw new Error('Not authenticated')
 
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('paychecks')
       .update(updates)
       .eq('id', paycheckId)

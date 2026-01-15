@@ -65,7 +65,7 @@ export function useCategories() {
           );
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("categories")
           .insert({
             ...category,
@@ -109,7 +109,7 @@ export function useCategories() {
           }
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("categories")
           .update(updates)
           .eq("id", id)

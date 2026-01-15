@@ -42,7 +42,8 @@ export function ProfileSettings() {
         .single()
 
       if (!error && data) {
-        const displayName = data.display_name || ''
+        // Type assertion for the query result
+        const displayName = (data as any).display_name || ''
         setInitialData({ displayName })
         form.reset({ displayName })
       }
@@ -57,7 +58,7 @@ export function ProfileSettings() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('profiles')
         .update({
           display_name: data.displayName || null,

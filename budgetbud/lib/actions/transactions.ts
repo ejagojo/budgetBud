@@ -13,7 +13,7 @@ export async function createTransaction(formData: {
   date: string
   description?: string
 }) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,15 +34,15 @@ export async function createTransaction(formData: {
   }
 
   try {
-    const { data, error } = await supabase
-      .from('transactions')
-      .insert({
-        user_id: user.id,
-        category_id: formData.categoryId,
-        amount: formData.amount,
-        date: formData.date,
-        description: formData.description || null,
-      })
+  const { data, error } = await (supabase as any)
+    .from('transactions')
+    .insert({
+      user_id: user.id,
+      category_id: formData.categoryId,
+      amount: formData.amount,
+      date: formData.date,
+      description: formData.description || null,
+    })
       .select()
       .single()
 
@@ -65,7 +65,7 @@ export async function createTransaction(formData: {
 }
 
 export async function deleteTransaction(transactionId: string) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

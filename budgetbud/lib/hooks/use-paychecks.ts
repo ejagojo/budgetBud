@@ -42,12 +42,11 @@ export function usePaychecks() {
 
       // For each paycheck, get all allocations for accurate breakdown display
       const paychecksWithAllocations = await Promise.all(
-        (paycheckData || []).map(async (paycheck) => {
-          const { data: allocations, error: allocError } = await supabase
-            .rpc('get_paycheck_with_allocations', {
-              p_paycheck_id: paycheck.id,
-              p_user_id: user.id
-            })
+        ((paycheckData as any[]) || []).map(async (paycheck: any) => {
+          const { data: allocations, error: allocError } = await (supabase.rpc as any)('get_paycheck_with_allocations', {
+            p_paycheck_id: paycheck.id,
+            p_user_id: user.id
+          })
 
           if (allocError) {
             console.error('Error fetching allocations for paycheck:', paycheck.id, allocError)
@@ -56,9 +55,9 @@ export function usePaychecks() {
 
           // Get all allocations sorted by percentage (for UI display logic)
           const paycheckAllocations = allocations
-            ?.filter(a => a.paycheck_id === paycheck.id)
-            .sort((a, b) => b.percentage - a.percentage)
-            .map(a => ({
+            ?.filter((a: any) => a.paycheck_id === paycheck.id)
+            .sort((a: any, b: any) => b.percentage - a.percentage)
+            .map((a: any) => ({
               category_id: a.category_id,
               category_name: a.category_name,
               category_color: a.category_color,
@@ -139,11 +138,10 @@ export function usePaycheck(paycheckId: string) {
       if (paycheckError) throw paycheckError
 
       // Get full allocations
-      const { data: allocationData, error: allocError } = await supabase
-        .rpc('get_paycheck_with_allocations', {
-          p_paycheck_id: paycheckId,
-          p_user_id: user.id
-        })
+      const { data: allocationData, error: allocError } = await (supabase.rpc as any)('get_paycheck_with_allocations', {
+        p_paycheck_id: paycheckId,
+        p_user_id: user.id
+      })
 
       if (allocError) throw allocError
 

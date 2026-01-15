@@ -55,6 +55,9 @@ export async function exportUserData(): Promise<void> {
 
     if (profileError) throw profileError
 
+    // Type assertion for profile data
+    const profileData = profile as { display_name: string | null; theme: string }
+
     // Fetch categories
     const { data: categories, error: categoriesError } = await supabase
       .from('categories')
@@ -65,11 +68,10 @@ export async function exportUserData(): Promise<void> {
     if (categoriesError) throw categoriesError
 
     // Fetch paychecks with allocations
-    const { data: paychecks, error: paychecksError } = await supabase
-      .rpc('get_paycheck_with_allocations', {
-        p_paycheck_id: null,
-        p_user_id: user.id
-      })
+    const { data: paychecks, error: paychecksError } = await (supabase.rpc as any)('get_paycheck_with_allocations', {
+      p_paycheck_id: null,
+      p_user_id: user.id
+    })
 
     if (paychecksError) throw paychecksError
 
@@ -126,12 +128,12 @@ export async function exportUserData(): Promise<void> {
         userId: user.id
       },
       profile: {
-        display_name: profile.display_name,
-        theme: profile.theme
+        display_name: profileData.display_name,
+        theme: profileData.theme
       },
       categories: categories || [],
       paychecks: Array.from(paycheckMap.values()),
-      transactions: (transactions || []).map(t => ({
+      transactions: ((transactions as any[]) || []).map((t: any) => ({
         id: t.id,
         category_name: (t.categories as any)?.name || 'Unknown',
         amount: Number(t.amount),
